@@ -78,7 +78,7 @@ window.initMap = () => {
   self.map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: loc,
-    scrollwheel: false
+    scrollwheel: false,
   });
   updateRestaurants();
 }
@@ -138,10 +138,16 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
+  const imageLink = document.createElement('a');
+  imageLink.className = 'restaurant-img-link';
+  imageLink.href = DBHelper.urlForRestaurant(restaurant);
+  li.append(imageLink);
+
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
+  image.alt = 'Restaurant ' + restaurant.name;
+  imageLink.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
