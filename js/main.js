@@ -12,6 +12,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchCuisines();
 });
 
+window.addEventListener('load', () => initSW());
+
+initSW = () => {
+  if (!navigator.serviceWorker) return;
+
+  navigator.serviceWorker.register('/sw.js').then( () => {
+    console.log('SW is working!');
+  }).catch( () => {
+    console.log('SW reg failed!');
+  });
+}
+
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -79,6 +91,7 @@ window.initMap = () => {
     zoom: 12,
     center: loc,
     scrollwheel: false,
+    title: 'Google Maps'
   });
   updateRestaurants();
 }
@@ -137,28 +150,33 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-
-  const imageLink = document.createElement('a');
-  imageLink.className = 'restaurant-img-link';
-  imageLink.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(imageLink);
+  // const imageLink = document.createElement('a');
+  // imageLink.className = 'restaurant-img-link';
+  // imageLink.href = DBHelper.urlForRestaurant(restaurant);
+  // li.append(imageLink);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = 'Restaurant ' + restaurant.name;
-  imageLink.append(image);
+  image.src = DBHelper.imageUrlForRestaurant(restaurant, 'default');
+  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 300w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
+  image.sizes = '(min-width: 768px) calc( 100vw / 2 - 100px ), (min-width: 1200px) calc( 100vw / 3 - 100px ), (min-width: 1920px) calc( 100vw / 4 - 100px )';
+  image.alt = restaurant.name + " " + restaurant['image-description'];
+  image.tabIndex = 0;
+  li.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
+  name.tabIndex = 0;
   li.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.tabIndex = 0;
   li.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.tabIndex = 0;
   li.append(address);
 
   const more = document.createElement('a');

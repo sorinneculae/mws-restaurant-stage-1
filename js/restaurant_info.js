@@ -20,6 +20,18 @@ window.initMap = () => {
   });
 }
 
+window.addEventListener('load', () => initSW());
+
+initSW = () => {
+  if (!navigator.serviceWorker) return;
+
+  navigator.serviceWorker.register('/sw.js').then( () => {
+    console.log('SW is working!');
+  }).catch( () => {
+    console.log('SW reg failed!');
+  });
+}
+
 /**
  * Get current restaurant from page URL.
  */
@@ -56,8 +68,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.className = 'restaurant-img';
+  image.src = DBHelper.imageUrlForRestaurant(restaurant, 'default');
+  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 300w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
+  image.sizes = '(min-width: 768px) calc( 100vw / 2 - 100px ), (min-width: 1200px) calc( 100vw / 3 - 100px ), (min-width: 1920px) calc( 100vw / 4 - 100px )';
+  image.alt = restaurant.name + " " + restaurant['image-description'];
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -77,6 +92,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
+    row.tabIndex = 0;
 
     const day = document.createElement('td');
     day.innerHTML = key;
@@ -97,11 +113,13 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.tabIndex = 0;
   container.appendChild(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
+    noReviews.tabIndex = 0;
     container.appendChild(noReviews);
     return;
   }
@@ -117,20 +135,33 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
+
+  const name_date = document.createElement('div');
+  name_date.className = "review-name-date";
+  name_date.tabIndex = "0";
+  li.appendChild(name_date);
+
   const name = document.createElement('p');
   name.innerHTML = review.name;
-  li.appendChild(name);
+  name.className = "reviewer";
+  name.tabIndex = "0";
+  name_date.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
-  li.appendChild(date);
+  date.className = "review-date";
+  date.tabIndex = "0";
+  name_date.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
+  rating.tabIndex = "0";
+  rating.className = "rating";
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
+  comments.tabIndex = "0";
   li.appendChild(comments);
 
   return li;
