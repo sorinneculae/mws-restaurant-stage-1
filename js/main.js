@@ -12,18 +12,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchCuisines();
 });
 
-window.addEventListener('load', () => initSW());
-
-initSW = () => {
-  if (!navigator.serviceWorker) return;
-
-  navigator.serviceWorker.register('/sw.js').then( () => {
-    console.log('SW is working!');
-  }).catch( () => {
-    console.log('SW reg failed!');
-  });
-}
-
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -158,13 +146,13 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant, 'default');
-  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 300w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
+  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 325w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
   image.sizes = '(min-width: 768px) calc( 100vw / 2 - 100px ), (min-width: 1200px) calc( 100vw / 3 - 100px ), (min-width: 1920px) calc( 100vw / 4 - 100px )';
-  image.alt = restaurant.name + " " + restaurant['image-description'];
+  image.alt = `${restaurant.name} Restaurant in ${restaurant.neighborhood}`;
   image.tabIndex = 0;
   li.append(image);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   name.tabIndex = 0;
   li.append(name);

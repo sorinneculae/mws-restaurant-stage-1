@@ -79,33 +79,34 @@ nav {
       text-transform: uppercase;
     }
   }
-}
 
-.breadcrumb {
-  padding: 10px 40px 16px;
-  list-style: none;
-  background-color: #eee;
-  margin: 0;
-  /* Display list items side by side */
-  li {
-    display: inline;
-    /* Add a color to all links inside the list */
-    a {
-      color: #0275d8;
-      text-decoration: none;
+  .breadcrumb {
+    padding: 10px 40px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 0;
+    text-align: left;
+    /* Display list items side by side */
+    li {
+      display: inline;
+      /* Add a color to all links inside the list */
+      a {
+        color: #0275d8;
+        text-decoration: none;
 
-      /* Add a color on mouse-over */
-      &:hover {
-        color: #01447e;
-        text-decoration: underline;
+        /* Add a color on mouse-over */
+        &:hover {
+          color: #01447e;
+          text-decoration: underline;
+        }
       }
     }
-  }
-  /* Add a slash symbol (/) before/behind each list item */
-  li+li:before {
-    padding: 8px;
-    color: black;
-    content: "/";
+    /* Add a slash symbol (/) before/behind each list item */
+    li+li:before {
+      padding: 8px;
+      color: black;
+      content: "/";
+    }
   }
 }
 
@@ -261,9 +262,9 @@ nav {
 
 .reviews-container {
   padding: 30px 40px 80px;
-  h2 {
+  h4 {
     color: #f58500;
-    font-size: 200%;
+    font-size: 180%;
     font-weight: 300;
     letter-spacing: -1px;
     padding-bottom: 1pt;
@@ -340,6 +341,10 @@ nav {
         font-size: 90%;
         letter-spacing: 0.125rem;
       }
+    }
+
+    .breadcrumb {
+      padding: 10px 20px 16px;
     }
   }
 

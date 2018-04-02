@@ -1,5 +1,5 @@
-var staticCacheName = 'mws-restaurant-v0';
-var contentImgsCache = 'mws-restaurant-imgs-0';
+var staticCacheName = 'mws-restaurant-v3';
+var contentImgsCache = 'mws-restaurant-imgs-v3';
 var allCaches = [
   staticCacheName,
   contentImgsCache
@@ -14,9 +14,23 @@ self.addEventListener('install', function(event) {
         '/js/main.js',
         '/js/restaurant_info.js',
         '/css/styles.css',
-        '/data/restaurants.json',
-        '/restaurant.html'
+        '/data/restaurants.json'
       ]);
+    }),
+
+    caches.open(contentImgsCache).then(function(cache) {
+      return cache.addAll([
+        '/img/1.jpg',
+        '/img/2.jpg',
+        '/img/3.jpg',
+        '/img/4.jpg',
+        '/img/5.jpg',
+        '/img/6.jpg',
+        '/img/7.jpg',
+        '/img/8.jpg',
+        '/img/9.jpg',
+        '/img/10.jpg'
+      ])
     })
   );
 });
@@ -38,13 +52,8 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
 
-  console.log(requestUrl.pathname);
-
   if (requestUrl.origin === location.origin) {
-    // if (requestUrl.pathname === '/') {
-    //   event.respondWith(caches.match('/skeleton'));
-    //   return;
-    // }
+
     if (requestUrl.pathname.startsWith('/img/')) {
       event.respondWith(servePhoto(event.request));
       return;
@@ -63,8 +72,7 @@ self.addEventListener('fetch', function(event) {
 });
 
 function servePhoto(request) {
-  var storageUrl = request.url.replace(/-\d+\.jpg$/, '');
-
+  var storageUrl = request.url.replace(/-\w+\./, '.');
   return caches.open(contentImgsCache).then(function(cache) {
     return cache.match(storageUrl).then(function(response) {
       if (response) return response;

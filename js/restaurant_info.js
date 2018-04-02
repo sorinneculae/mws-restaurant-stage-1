@@ -70,9 +70,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant, 'default');
-  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 300w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
+  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 325w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
   image.sizes = '(min-width: 768px) calc( 100vw / 2 - 100px ), (min-width: 1200px) calc( 100vw / 3 - 100px ), (min-width: 1920px) calc( 100vw / 4 - 100px )';
-  image.alt = restaurant.name + " " + restaurant['image-description'];
+  image.alt = `${restaurant.name} Restaurant in ${restaurant.neighborhood}`;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -111,7 +111,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h4');
   title.innerHTML = 'Reviews';
   title.tabIndex = 0;
   container.appendChild(title);
