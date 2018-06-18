@@ -4,25 +4,54 @@
 */
 
 module.exports = function(grunt) {
-
+  require('load-grunt-tasks')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    // concat: {
-    //     dist: {
-    //       src: [
-    //           'js/*.js'
-    //       ],
-    //       dest: 'js/production.js',
-    //     }
-    // },
+    concat: {
+      options: {
+        separator: ';',
+      },
 
-    // uglify: {
-    //   dev: {
-    //       src: 'js/production.js',
-    //       dest: 'js/production.min.js'
-    //   }
-    // },
+      basic_and_extras: {
+        files: {
+          'js/production_main.js': ['js/dbhelper.js', 'js/main.js', 'js/init_service_worker.js'],
+          'js/production_restaurant.js': ['js/dbhelper.js', 'js/restaurant_info.js', 'js/init_service_worker.js'],
+        },
+      },
+    },
+
+    babel: {
+      options: {
+        sourceMap: true,
+        presets: ['env']
+      },
+      dist: {
+        files: {
+          'dist/production_main.js': 'js/production_main.js',
+          'dist/production_restaurant.js': 'js/production_restaurant.js',
+        }
+      }
+      // dist: {
+      //   files: [{
+      //     expand: true,
+      //     src: ['js/production_main.js'],
+      //     dest: 'dist/'
+      //   }]
+      // }
+    },
+
+    uglify: {
+      options: {
+        mangle: false
+      },
+      my_target: {
+        files: {
+          'dist/production_main.min.js': ['dist/production_main.js'],
+          'dist/production_restaurant.min.js': ['dist/production_restaurant.js']
+        }
+      }
+    },
 
     responsive_images: {
       dev: {
@@ -75,7 +104,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         options: {
-          style: 'expanded'
+          style: 'compressed'
         },
         files: {
           'css/styles.css': 'css/styles.scss'
@@ -88,13 +117,13 @@ module.exports = function(grunt) {
         livereload: true,
       },
 
-      // scripts: {
-      //   files: ['js/*.js'],
-      //   tasks: ['concat', 'uglify'],
-      //   options: {
-      //     spawn: false,
-      //   }
-      // },
+      scripts: {
+        files: ['js/*.js'],
+        tasks: ['concat', 'babel', 'uglify'],
+        options: {
+          spawn: false,
+        }
+      },
 
       css: {
         files: ['css/*.scss'],
@@ -113,6 +142,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', [/*'concat', 'uglify',*/ 'clean', 'mkdir', 'responsive_images', 'watch',]);
+  grunt.registerTask('default', ['concat', 'babel', 'uglify', 'clean', 'mkdir', 'responsive_images', 'sass', 'watch']);
 
 };

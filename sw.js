@@ -1,5 +1,5 @@
-var staticCacheName = 'mws-restaurant-v3';
-var contentImgsCache = 'mws-restaurant-imgs-v3';
+var staticCacheName = 'mws-restaurant-v4';
+var contentImgsCache = 'mws-restaurant-imgs-v4';
 var allCaches = [
   staticCacheName,
   contentImgsCache
@@ -10,11 +10,9 @@ self.addEventListener('install', function(event) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/',
-        '/js/dbhelper.js',
-        '/js/main.js',
-        '/js/restaurant_info.js',
+        '/dist/production_main.min.js',
+        '/dist/production_restaurant.min.js',
         '/css/styles.css',
-        '/data/restaurants.json'
       ]);
     }),
 
@@ -70,6 +68,42 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+/* to cache url pathname without param */
+
+// self.addEventListener('fetch', function (event) {
+//   url = new URL(event.request.url)
+//   event.respondWith(
+//     caches.match(url.pathname)
+//     .then(function (response) {
+//       return response || fetch(event.request);
+//     })
+//     .catch(err => console.log("Fetch error", err))
+//   );
+// });
+
+// self.addEventListener('fetch', function(e){
+//     //console.log('[ServiceWorker] Fetching', e.request.url);
+
+//     e.respondWith(
+
+//         caches.open(staticCacheName).then(cache => {
+//             return cache.match(e.request).then(response => {
+//                 // Return response from cache if one exists, otherwise go to network
+//                 return (
+//                     response ||
+//                     fetch(e.request).then(response => {
+//                         cache.put(e.request, response.clone());   /*This is the line with the error*/
+//                         return response;
+//                     })
+//                     .catch(function (err) {
+//                         console.log("[ServiceWorker]Error fetching and caching", err);
+//                     })
+//                 );
+//             });
+//         })
+//     );
+// })
 
 function servePhoto(request) {
   var storageUrl = request.url.replace(/-\w+\./, '.');

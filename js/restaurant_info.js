@@ -70,7 +70,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant, 'default');
-  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 325w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, 'default')} 800w`
+  image.srcset = `${DBHelper.imageUrlForRestaurant(restaurant, 'small')} 325w, ${DBHelper.imageUrlForRestaurant(restaurant, 'medium')} 500w, ${DBHelper.imageUrlForRestaurant(restaurant, '')} 800w`
   image.sizes = '(min-width: 768px) calc( 100vw / 2 - 100px ), (min-width: 1200px) calc( 100vw / 3 - 100px ), (min-width: 1920px) calc( 100vw / 4 - 100px )';
   image.alt = `${restaurant.name} Restaurant in ${restaurant.neighborhood}`;
 

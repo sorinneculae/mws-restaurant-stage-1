@@ -1,10 +1,10 @@
 window.addEventListener('load', () => initSW());
 
-initSW = () => {
+let initSW = () => {
   if (!navigator.serviceWorker) return;
 
   navigator.serviceWorker.register('/sw.js').then( () => {
-    console.log('SW is working!');
+    console.log('SW is working! ----- ');
   }).catch( () => {
     console.log('SW reg failed!');
   });
